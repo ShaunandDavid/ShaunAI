@@ -1,0 +1,34 @@
+{
+  "messages": [
+    {
+      "text": "{{NAME}}, 15-min call to cut CAC 20% and lift LTV. 30-day ROI or you pay $0. Interested?"
+    },
+    {
+      "text": "{{NAME}}, we automate top 3 manual steps and free 20% SDR time. Pilot shows ROI in 2 weeks. Time to chat?"
+    },
+    {
+      "text": "{{NAME}}, want a 90-day plan to reduce churn 10% and grow NRR? We'll bring the model and data. When works?"
+    },
+    {
+      "text": "{{NAME}}, we add pipeline without extra headcount. Payback <60 days. Open to a quick review?"
+    },
+    {
+      "text": "{{NAME}}, let's find 5 quick wins to add $500k ARR this quarter. No commit; pilot first. Up for it?"
+    },
+    {
+      "text": "{{NAME}}, cut unit costs 12% by fixing leakage you already pay for. I'll show the math. 20-min?"
+    },
+    {
+      "text": "{{NAME}}, ship faster and reduce rework 25% with our QA layer. Risk-free pilot. Want details?"
+    },
+    {
+      "text": "{{NAME}}, CFOs choose us for clear ROI: margins up, CAC down. Can I send a 1-page case?"
+    },
+    {
+      "text": "{{NAME}}, we recover 3-7% revenue lost in billing errors. Zero lift for your team. Talk this week?"
+    },
+    {
+      "text": "{{NAME}}, if we can't prove 5x ROI, we walk. If we can, you scale. Explore for 15 minutes?"
+    }
+  ]
+}

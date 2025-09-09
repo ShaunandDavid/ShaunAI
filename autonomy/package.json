@@ -1,0 +1,19 @@
+{
+  "name": "shaunai-autonomy",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "daily": "node src/index.js --routine=daily",
+    "outreach": "node src/index.js --routine=outreach",
+    "loop": "node src/index.js --loop",
+    "dev": "NODE_ENV=development node src/index.js --loop"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "node-cron": "^3.0.3",
+    "openai": "^4.104.0",
+    "puppeteer": "^24.19.0",
+    "yaml": "^2.8.1"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "shaun-agent-ai",
+  "version": "1.0.0",
+  "description": "Agentic AI project for Shaun",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "npm run dev:operator",
+    "dev:server": "npm run dev:operator",
+    "dev:full": "concurrently \"npm --prefix autonomy/server run dev\" \"npm --prefix autonomy/ui run dev\"",
+    "build": "tsc && npm --prefix autonomy/ui run build && npm --prefix autonomy/server run build",
+    "start": "node dist/main.js",
+    "lint": "npm --prefix autonomy/server run lint && npm --prefix autonomy/ui run lint",
+    "typecheck": "npm --prefix autonomy/server run typecheck && npm --prefix autonomy/ui run typecheck",
+    "test": "npm --prefix autonomy/server run test && npm --prefix autonomy/ui run test",
+    "dev:operator": "npm --prefix autonomy/server run dev",
+    "dev:ui": "npm --prefix autonomy/ui run dev",
+    "dev:stack": "npm:dev:operator"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@changesets/cli": "^2.29.6",
+    "@tailwindcss/postcss": "^4.1.13",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.0.0"
+  }
+}

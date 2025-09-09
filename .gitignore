@@ -1,0 +1,23 @@
+# Node
+node_modules/
+dist/
+
+# Local env and secrets
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Logs and artifacts
+**/logs/
+**/artifacts/
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Build caches
+*.tsbuildinfo

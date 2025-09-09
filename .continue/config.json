@@ -1,0 +1,16 @@
+{
+  "profile": "ShaunAI",
+  "loop": {
+    "taskQueue": "shaunai/tasks/inbox.md",
+    "memory": "shaunai/persona.shaunai.memory.md",
+    "contentScript": "shaunai/content/daily.md",
+    "outreachScript": "shaunai/outreach/2025-09-06.md",
+    "cycle": [
+      "Read inbox.md for [High] task",
+      "Plan 3 steps (ADHD mode)",
+      "Execute smallest chunk",
+      "Report WIDA/Assumptions/Next"
+    ]
+  },
+  "tools": ["terminal", "git", "browser"]
+}

@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* light, clean defaults */
+:root {
+  --bg: #f7f7f8;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+}
