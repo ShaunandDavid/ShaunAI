@@ -20,7 +20,7 @@ import {
   Dashboard as DashboardIcon,
   Chat as ChatIcon,
   Assignment as TaskIcon,
-  Integration as IntegrationIcon,
+  Settings as IntegrationIcon,
   Archive as ArtifactIcon,
   Psychology as AIIcon,
 } from '@mui/icons-material';
