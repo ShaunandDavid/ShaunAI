@@ -47,3 +47,4 @@ CI workflow at `.github/workflows/ci.yml` installs deps, lints, typechecks, test
 
 ## License
 MIT
+\n\n## 🚀 Enhanced Agent Mode\n\nShaunAI now includes a powerful enhanced agent mode that provides autonomous operation with advanced capabilities:\n\n```bash\n# Run enhanced agent\nENHANCED_MODE=true npm run start\n\n# Or run integration demo\nnode dist/integration.js\n```\n\nSee [ENHANCED_AGENT_GUIDE.md](./ENHANCED_AGENT_GUIDE.md) for complete documentation.\n\n### Enhanced Capabilities\n- 🤖 Autonomous operation with 30-second cycles\n- 🌐 Advanced web automation and analysis  \n- 🧠 Multi-modal reasoning with memory\n- 📝 Content generation across formats\n- 📊 Data analysis and insights\n- 💻 Multi-language code generation\n- 🔍 Real-time system monitoring\n- 📈 Self-improvement through learning
