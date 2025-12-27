@@ -346,6 +346,78 @@ app.post("/api/run-one", async (req, res) => {
   }
 });
 
+
+// --- Chat API with Browser Operator Integration ---
+app.post("/api/chat", async (req, res) => {
+  const { message, history = [] } = req.body || {};
+  if (!message || typeof message !== "string") {
+    return res.status(400).json({ error: "Missing message" });
+  }
+
+  // Check if this is a browser task
+  if (isBrowserTask(message)) {
+    broadcast({ type: "message", id: nanoid(), role: "user", content: message, at: nowISO() });
+    broadcast({ type: "message", id: nanoid(), role: "agent", content: "Starting browser task...", at: nowISO() });
+
+    try {
+      const result = await doBrowserTask(message, broadcast);
+      broadcast({ type: "message", id: nanoid(), role: "agent", content: result.summary || "Browser task completed.", at: nowISO() });
+      if (result.screenshot) {
+        broadcast({ type: "screenshot", id: nanoid(), url: result.screenshot, at: nowISO(), title: "Browser result" });
+      }
+      return res.json({ reply: result.summary, screenshot: result.screenshot, browserTask: true });
+    } catch (err) {
+      const errMsg = `Browser task failed: ${String(err)}`;
+      broadcast({ type: "message", id: nanoid(), role: "agent", content: errMsg, at: nowISO() });
+      return res.status(500).json({ error: errMsg });
+    }
+  }
+
+  // Not a browser task - use OpenAI LLM
+  if (!canCallOpenAI()) {
+    return res.status(429).json({ error: "Rate limited. Try again in a moment." });
+  }
+  if (!OPENAI_API_KEY) {
+    return res.status(500).json({ error: "LLM not configured. Set OPENAI_API_KEY." });
+  }
+
+  broadcast({ type: "message", id: nanoid(), role: "user", content: message, at: nowISO() });
+
+  try {
+    const messages = [
+      { role: "system", content: "You are ShaunAI, Shaun's digital twin. Voice: gritty, no-BS, hopeful, faith-aware. Answer directly and concisely." },
+      ...history.slice(-10),
+      { role: "user", content: message }
+    ];
+
+    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: OPENAI_MODEL,
+        temperature: 0.3,
+        messages
+      })
+    });
+
+    if (!resp.ok) {
+      const err = await resp.text().catch(() => resp.statusText);
+      return res.status(500).json({ error: `LLM error: ${err}` });
+    }
+
+    const json = await resp.json();
+    const reply = json?.choices?.[0]?.message?.content?.trim() || "No response.";
+
+    broadcast({ type: "message", id: nanoid(), role: "agent", content: reply, at: nowISO() });
+    return res.json({ reply });
+  } catch (err) {
+    return res.status(500).json({ error: String(err) });
+  }
+});
+
 // --- unified console APIs ---
 
 // Health/status used by console footer
