@@ -1,0 +1,41 @@
+{
+  "name": "@shaunai/worker",
+  "version": "0.2.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@shaunai/crm": "workspace:*",
+    "@shaunai/crm-hubspot": "workspace:*",
+    "@shaunai/db": "workspace:*",
+    "@shaunai/model-router": "workspace:*",
+    "@shaunai/policy": "workspace:*",
+    "@shaunai/shared": "workspace:*",
+    "@temporalio/client": "1.10.4",
+    "@temporalio/worker": "1.10.4",
+    "@temporalio/workflow": "1.10.4",
+    "@hubspot/api-client": "11.1.0",
+    "@microsoft/microsoft-graph-client": "3.0.7",
+    "@azure/identity": "4.2.1",
+    "googleapis": "134.0.0",
+    "bottleneck": "2.19.5",
+    "ioredis": "5.4.1",
+    "p-limit": "6.1.0",
+    "p-retry": "6.2.1",
+    "pg": "8.11.5",
+    "uuid": "9.0.1",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/uuid": "9.0.8",
+    "tsx": "4.16.2",
+    "vitest": "2.0.5"
+  }
+}

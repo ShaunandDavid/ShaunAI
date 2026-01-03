@@ -1,0 +1,252 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  REVOPS
+  MANAGER
+  OPERATOR
+  AUDITOR
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  DENIED
+  BLOCKED
+}
+
+enum ReplyClassification {
+  POSITIVE
+  NEUTRAL
+  OBJECTION
+  UNSUBSCRIBE
+  OOO
+  BOUNCE
+}
+
+enum CrmProvider {
+  HUBSPOT
+  SALESFORCE
+}
+
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  plan      String   @default("pilot")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       User[]
+  campaigns   Campaign[]
+  prospects   Prospect[]
+  approvals   Approval[]
+  auditEvents AuditEvent[]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  tenantId  String
+  email     String
+  role      Role     @default(OPERATOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+}
+
+model Prospect {
+  id        String   @id @default(cuid())
+  tenantId  String
+  email     String?
+  name      String?
+  company   String?
+  title     String?
+  source    String   @default("import")
+  tags      String[]
+  data      Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([tenantId, email])
+}
+
+model Campaign {
+  id        String   @id @default(cuid())
+  tenantId  String
+  name      String
+  status    String   @default("draft")
+  offer     String?
+  persona   String?
+  data      Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  sequences Sequence[]
+
+  @@index([tenantId])
+}
+
+model Sequence {
+  id         String   @id @default(cuid())
+  tenantId   String
+  campaignId String
+  name       String
+  steps      Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+
+  @@index([tenantId])
+  @@index([campaignId])
+}
+
+model Approval {
+  id          String         @id @default(cuid())
+  tenantId    String
+  action      String
+  status      ApprovalStatus @default(PENDING)
+  reason      String?
+  payload     Json?
+  requestedBy String?
+  approvedBy  String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+}
+
+model PolicyDecision {
+  id          String   @id @default(cuid())
+  tenantId    String
+  action      String
+  allow       Boolean
+  reasons     String[]
+  evidence    Json?
+  correlationId String?
+  createdAt   DateTime @default(now())
+
+  @@index([tenantId])
+}
+
+model AuditEvent {
+  id           String   @id @default(cuid())
+  tenantId     String
+  actor        String?
+  eventType    String
+  eventJson    Json
+  hash         String?
+  previousHash String?
+  createdAt    DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([eventType])
+}
+
+model IntentEvent {
+  id              String             @id @default(cuid())
+  tenantId        String
+  prospectId      String?
+  classification  ReplyClassification
+  confidence      Float
+  evidence        Json?
+  replyExcerpt    String?
+  dealStatus      String?            @default("pending")
+  approvalId      String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@index([tenantId])
+  @@index([prospectId])
+}
+
+model Deal {
+  id         String   @id @default(cuid())
+  tenantId   String
+  name       String
+  amount     Float?
+  stage      String?
+  source     String?
+  externalId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+model Touch {
+  id         String   @id @default(cuid())
+  tenantId   String
+  prospectId String?
+  direction  String
+  subject    String?
+  bodyHash   String?
+  messageId  String?
+  sentAt     DateTime?
+  createdAt  DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([prospectId])
+}
+
+model Meeting {
+  id         String   @id @default(cuid())
+  tenantId   String
+  prospectId String?
+  title      String
+  startAt    DateTime
+  endAt      DateTime
+  externalId String?
+  createdAt  DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([prospectId])
+}
+
+model CrmAccount {
+  id            String      @id @default(cuid())
+  tenantId      String
+  provider      CrmProvider
+  accessToken   String
+  refreshToken  String?
+  expiresAt     DateTime?
+  scopes        String[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([tenantId, provider])
+}
+
+model CrmMapping {
+  id           String      @id @default(cuid())
+  tenantId     String
+  provider     CrmProvider
+  internalType String
+  internalId   String
+  externalId   String
+  createdAt    DateTime    @default(now())
+
+  @@unique([tenantId, provider, internalType, internalId])
+  @@unique([tenantId, provider, externalId])
+  @@index([tenantId])
+}

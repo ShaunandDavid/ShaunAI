@@ -1,0 +1,22 @@
+{
+  "name": "@shaunai/policy",
+  "version": "0.2.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@shaunai/shared": "workspace:*",
+    "json-stable-stringify": "1.1.1",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
+  }
+}
